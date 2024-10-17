@@ -1,7 +1,7 @@
 import os
 from google.cloud import pubsub_v1
 
-project_id = "{REPLACE_WITH_PROJECT_ID}"
+project_id = "sandbox-427708"
 pub_sub_topic = "live-translation"
 pub_sub_subscription = "live-translation-sub"
 

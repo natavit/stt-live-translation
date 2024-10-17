@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Live Translation</title>
+    <script src="reconnecting-websocket.min.js"></script>
+  </head>
+  <body>
+    <h1>Live Translation</h1>
+    <div id="messages"></div>
+    <br>
+    <h2>Last 5 Messages</h2>
+    <ul id="last-messages"></ul>
+    <script>
+      const socket = new ReconnectingWebSocket("/ws");
+      const messagesDiv = document.getElementById("messages");
+      const lastMessagesDiv = document.getElementById("last-messages");
+      const lastMessages = [];
+
+      socket.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        const output = msg["output"]
+        const isFinal = msg["isFinal"];
+        messagesDiv.textContent = output;
+
+        if (isFinal) {
+          lastMessages.unshift(output);
+        }
+
+        if (lastMessages.length > 5) {
+          lastMessages.pop(); 
+        }
+
+        // Update the "last-messages" div
+        lastMessagesDiv.innerHTML = ""; // Clear previous messages
+        lastMessages.forEach((message, index) => {
+            const messageElement = document.createElement("li");
+            messageElement.textContent = message;
+            lastMessagesDiv.appendChild(messageElement);
+        });
+      };
+    </script>
+  </body>
+</html>
